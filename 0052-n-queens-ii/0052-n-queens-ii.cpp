@@ -1,8 +1,8 @@
 class Solution {
     private:
-    void find(int row, int n, vector<bool>& l, vector<bool>& r, vector<bool>& c, vector<vector<string>>& ans, vector<string>& st) {
+    void find(int row, int n, vector<bool>& l, vector<bool>& r, vector<bool>& c, int& ans, vector<string>& st) {
         if (row == n) {
-            ans.push_back(st);
+            ans++;
             return;
         }
         for (int i = 0; i < n; i++) {
@@ -25,13 +25,13 @@ public:
             st.emplace_back(s);
         }
 
-        vector<vector<string>> ans;
+        int ans =0;
         vector<bool> left(2 * (n - 1)+5), right(2 * (n - 1)+5);
         vector<bool> col(n);
 
         find(0, n, left, right, col, ans, st);
 
-        return ans.size();
+        return ans;
     }
 };
 
