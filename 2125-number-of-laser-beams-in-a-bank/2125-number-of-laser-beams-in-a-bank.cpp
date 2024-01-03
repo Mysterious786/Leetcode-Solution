@@ -13,8 +13,8 @@ public:
         }
        
         for(int i=0;i<v.size()-1;i++){
-            if(v[i] == 0) continue;
-             else if(v[i+1] == 0) {v[i+1]+=v[i];continue;}
+            if(v[i] == 0){}
+             else if(v[i+1] == 0) {v[i+1]+=v[i];}
             else{
             
             
