@@ -1,15 +1,15 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        //brute force
-        //Naive Approach
+     // Optimised Approach
+        map<int,int> mp;
         int n = nums.size();
-        for(int i=0;i<n-1;i++){
-            for(int j=i+1;j<n;j++){
-                if(nums[i]+nums[j] == target ) {
-                    return {i,j};
-                }
+        for(int i=0;i<n;i++){
+            int rem = target-nums[i];
+            if(mp.find(rem)!=mp.end()){
+                return{i,mp[rem]};
             }
+            mp[nums[i]] = i;
         }
         return {};
     }
