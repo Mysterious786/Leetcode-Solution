@@ -1,17 +1,14 @@
-class Solution(object):
-    def singleNumber(self,nums):
-        xor = 0
+class Solution:
+    def singleNumber(self, nums):
+        xori = 0
+        a = 0
+        b = 0
         for num in nums:
-            xor ^= num
-    
-        set_bit = xor & -xor
-    
-        a, b = 0, 0
+            xori ^= num
+        val = xori & -xori  # Isolate the rightmost set bit
         for num in nums:
-            if num & set_bit:
+            if val & num:
                 a ^= num
             else:
                 b ^= num
-    
         return [a, b]
-        
