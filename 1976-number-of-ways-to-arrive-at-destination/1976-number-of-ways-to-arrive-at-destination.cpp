@@ -26,7 +26,7 @@ public:
             int node = it.second;
             pq.pop();
             
-            if (edge > dis[node].first) continue; // Skip if we have already found a shorter way
+           // if (edge > dis[node].first) continue; // Skip if we have already found a shorter way
             
             for (auto& adjNode : adj[node]) {
                 int to = adjNode.first;
