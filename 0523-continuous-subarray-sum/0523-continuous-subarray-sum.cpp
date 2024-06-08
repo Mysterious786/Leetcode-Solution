@@ -9,7 +9,7 @@ public:
         for (int i = 0; i < n; ++i) {
             sum += nums[i];
             int mod = sum % k;
-            
+            if (mod < 0) mod += k; // Ensure the mod is positive
             
             if (modMap.find(mod) != modMap.end()) {
                 if (i - modMap[mod] > 1) {
@@ -23,4 +23,3 @@ public:
         return false;
     }
 };
-
