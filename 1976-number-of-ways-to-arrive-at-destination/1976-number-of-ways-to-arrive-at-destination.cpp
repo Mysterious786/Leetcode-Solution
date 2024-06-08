@@ -8,7 +8,7 @@ class Solution {
     const static long long MOD = 1e9 + 7;
 public:
     int countPaths(int n, vector<vector<int>>& roads) {
-        vector<pair<long long, int>> dis(n, {1e18, 0}); // {shortest distance, number of ways}
+        vector<pair<long long, long long>> dis(n, {1e18, 0}); // {shortest distance, number of ways}
         dis[0] = {0, 1}; // starting node with distance 0 and 1 way to reach
         
         vector<vector<pair<int, int>>> adj(n);
@@ -19,14 +19,18 @@ public:
         
         priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
         pq.push({0, 0});
-        
+  
         while (!pq.empty()) {
-            auto [edge, node] = pq.top();
+            auto it = pq.top();
+            long long edge = it.first;
+            int node = it.second;
             pq.pop();
             
             if (edge > dis[node].first) continue; // Skip if we have already found a shorter way
             
-            for (auto& [to, W] : adj[node]) {
+            for (auto& adjNode : adj[node]) {
+                int to = adjNode.first;
+                int W = adjNode.second;
                 if (dis[to].first > edge + W) {
                     dis[to].first = edge + W;
                     dis[to].second = dis[node].second;
