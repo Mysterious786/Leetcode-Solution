@@ -7,7 +7,7 @@ public:
         int curr = 0;
         int ans =0;
         for(auto it : nums){
-            curr = (curr + it%k+k)%k;
+            curr = (curr + ((it%k)+k))%k;
             ans = ans+mp[curr];
             mp[curr]++;
         }
