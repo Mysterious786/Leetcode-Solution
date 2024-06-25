@@ -48,27 +48,21 @@ public:
     }
 }; 
 
-
 class Solution {
 public:
     int makeConnected(int n, vector<vector<int>>& connections) {
-        if (connections.size() < n - 1) {
-            return -1; // Not enough connections to connect all nodes
+if(connections.size()<n-1)return -1;
+        DisjointSet dsu(n+1);
+        for(auto it : connections){
+            dsu.unionBySize(it[0],it[1]);
         }
-
-        DisjointSet dsu(n); // Initialize DisjointSet with n
-
-        for (auto& it : connections) {
-            dsu.unionBySize(it[0], it[1]);
+        int ans =0;
+        for(int i=0;i<n;i++){
+            if(dsu.findUPar(i) == i) ans++;
         }
-
-        int numComponents = 0;
-        for (int i = 0; i < n; i++) {
-            if (dsu.findUPar(i) == i) {
-                numComponents++;
-            }
-        }
-
-        return numComponents - 1; // The number of operations needed is the number of components minus 1
+        
+      
+        return ans-1;
+        
     }
 };
