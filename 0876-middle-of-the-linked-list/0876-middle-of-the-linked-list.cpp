@@ -11,9 +11,9 @@
 class Solution {
 public:
     ListNode* middleNode(ListNode* head) {
-        //First of all what I am thinking is to use Floyd tortoise hare method
-       ListNode* slow = head;
+        if(head == NULL||head->next==NULL) return head;
         ListNode* fast = head;
+        ListNode* slow=head;
         while(fast and fast->next){
             fast = fast->next->next;
             slow = slow->next;
