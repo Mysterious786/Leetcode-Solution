@@ -20,17 +20,14 @@
  */
 class Solution {
 private:
-    ListNode* reverse(ListNode* head) {
-        ListNode* prev = NULL;
-        ListNode* curr = head;
-        while (curr != NULL) {
-            ListNode* nextNode = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = nextNode;
-        }
-        return prev;
-    }
+	ListNode* reverse(ListNode* head){
+		if(head == NULL or head->next==NULL) return head;
+		ListNode* rest = reverse(head->next);
+		ListNode* front = head->next;
+		front->next = head;
+		head->next = NULL;
+		return rest;
+	}
 
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
