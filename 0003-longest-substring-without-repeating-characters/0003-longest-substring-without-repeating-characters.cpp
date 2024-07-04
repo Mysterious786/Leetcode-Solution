@@ -1,30 +1,28 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        // Brute Force
-        
         int n = s.size();
-        if(n==0) return 0;
-        int ans = 1;
-        for(int i=0;i<n;i++){
-            map<char,int> mp;
-            bool extra = false;
-            int j =i;
-            for(;j<n;j++){
-                if(mp.find(s[j])==mp.end()){
-                    mp[s[j]]++;
-                    ans = max(ans,j-i+1);
+        if (n == 0) return 0;
+        
+        int start = 0, end = 0, ans = 0;
+        map<char, int> mp;
+        
+        while (end < n) {
+            mp[s[end]]++;  
+            
+          
+            while (mp[s[end]] > 1) {
+                mp[s[start]]--;
+                if (mp[s[start]] == 0) {
+                    mp.erase(s[start]);
                 }
-                else{
-                    extra = true;
-                    break;
-                }
-                
+                start++;
             }
             
-            
+            ans = max(ans, end - start + 1);
+            end++;
         }
-        return ans;
         
+        return ans;
     }
 };
