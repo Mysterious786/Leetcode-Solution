@@ -1,5 +1,5 @@
 class Solution {
-    int dp[25][2][500];
+    int dp[25][10][500];
     const static long long MOD = 1e9+7;
 private:
     long long f(int ind, bool tight, int sum, int minSum, int maxSum, string& s) {
