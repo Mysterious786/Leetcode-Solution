@@ -1,37 +1,52 @@
 class Solution {
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        vector<int> dis(n, 1e9); // Initialize distances to a high value
-        vector<vector<pair<int, int>>> adj(n);
-        for (auto& time : times) {
-            adj[time[0] - 1].push_back({time[1] - 1, time[2]}); // Adjust to zero-based indexing
-        }
-        
+        // Create a priority queue with custom comparator for min-heap
         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-        pq.push({0, k - 1}); // Adjust source node to zero-based indexing
-        dis[k - 1] = 0; // Distance to the source node is 0
 
+        // Initialize distance array with INT_MAX
+        vector<int> dist(n + 1, INT_MAX);
+
+        // Build adjacency list representation
+        vector<vector<pair<int, int>>> adj(n + 1);
+        for (auto it : times) {
+            adj[it[0]].push_back(make_pair(it[2], it[1])); // (weight, destination)
+        }
+
+        // Start exploration from node k
+        pq.push({0, k}); // (distance, node)
+        dist[k] = 0;
+
+        // Dijkstra's algorithm loop
         while (!pq.empty()) {
-            auto q = pq.top();
+            auto top = pq.top();
             pq.pop();
-            int node = q.second;
-            int d = q.first;
 
-            for (auto& it : adj[node]) {
-                int to = it.first;
-                int weight = d + it.second;
-                if (weight < dis[to]) { // Relaxation step
-                    dis[to] = weight;
-                    pq.push({weight, to});
+            int d = top.first; // Current distance from source
+            int node = top.second; // Current node
+
+            // Explore neighbors
+            for (auto it : adj[node]) {
+                int neighbor = it.second; // Destination node
+                int weight = it.first;   // Edge weight
+
+                // Update distance if shorter path found
+                if (dist[neighbor] > dist[node] + weight) {
+                    dist[neighbor] = dist[node] + weight;
+                    pq.push({dist[neighbor], neighbor});
                 }
             }
         }
 
-        int maxi = INT_MIN;
-        for (int i = 0; i < n; i++) {
-            if (dis[i] == 1e9) return -1; // If any node is unreachable, return -1
-            maxi = max(dis[i], maxi);
+        // Check for unreachable nodes
+        int ans = INT_MIN;
+        for (int i = 1; i <= n; i++) {
+            if (dist[i] == INT_MAX) {
+                return -1; // Unreachable node found
+            }
+            ans = max(ans, dist[i]);
         }
-        return maxi;
+
+        return ans;
     }
 };
