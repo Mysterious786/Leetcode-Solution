@@ -63,7 +63,7 @@ class Solution {
     }
 
 public:
-    long long countGoodIntegers(int n, long long k) {
+    long long countGoodIntegers(long long n, long long k) {
         nums.resize(n);
         generatePermutation(0, n - 1, k);
         long long ans = 0;
