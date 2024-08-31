@@ -1,76 +1,39 @@
 #include <vector>
-#include <queue>
-#include <limits.h>
+#include <algorithm>
 
 using namespace std;
 
 class Solution {
-private:
-    vector<int> dijkstra(int V, vector<vector<pair<int, int>>>& adj, int S)
-    {
-        // Create a priority queue for storing nodes as a pair {dist,node}
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-
-        // Initializing distTo list with a large number (indicating infinity)
-        vector<int> distTo(V, INT_MAX);
-
-        // Source initialized with dist=0.
-        distTo[S] = 0;
-        pq.push({0, S});
-
-        // Process nodes in the priority queue
-        while (!pq.empty())
-        {
-            int node = pq.top().second;
-            int dis = pq.top().first;
-            pq.pop();
-
-            // Check all adjacent nodes of the popped node
-            for (auto& it : adj[node])
-            {
-                int v = it.first;
-                int w = it.second;
-                if (dis + w < distTo[v])
-                {
-                    distTo[v] = dis + w;
-
-                    // Push the updated distance to the queue
-                    pq.push({distTo[v], v});
-                }
-            }
-        }
-
-        // Return the list containing the shortest distances from source to all nodes.
-        return distTo;
-    }
-
 public:
     vector<int> shortestDistanceAfterQueries(int n, vector<vector<int>>& queries) {
-        // Initialize the adjacency list
-        vector<vector<pair<int, int>>> adj(n);
+        vector<int> dp(n, 0);
 
-        // Create the initial graph connections
-        for (int i = 0; i < n - 1; i++) {
-            adj[i].push_back({i + 1, 1});
-            //adj[i + 1].push_back({i, 1});
+        // Initialize the dp array with default distances
+        for (int i = 1; i < n; i++) {
+            dp[i] = dp[i - 1] + 1;
         }
 
         vector<int> ans;
+        vector<vector<int>> roads(n); // Correctly declare roads as a vector of vectors
+
+        // Process each query
         for (auto& it : queries) {
             int u = it[0];
             int v = it[1];
 
-            // Add the bidirectional edges for each query
-            adj[u].push_back({v, 1});
-           // adj[v].push_back({u, 1});
+            roads[v].push_back(u); // Push the road connection
 
-            // Get the shortest distances from node 0
-            vector<int> dist = dijkstra(n, adj, 0);
+            for (int i = v; i < n; i++) {
+                dp[i] = min(dp[i], dp[i - 1] + 1);
 
-            // Assuming you want the distance to the node `v`
-            ans.push_back(dist[n-1]);
+                for (auto& connectedNode : roads[i]) {
+                    dp[i] = min(dp[i], dp[connectedNode] + 1);
+                }
+            }
+
+            ans.push_back(dp[n - 1]); // Store the shortest distance to the last node
         }
+
         return ans;
     }
 };
-
