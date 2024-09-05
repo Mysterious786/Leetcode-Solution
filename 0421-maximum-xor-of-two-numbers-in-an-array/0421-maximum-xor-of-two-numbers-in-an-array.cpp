@@ -47,13 +47,13 @@ public:
         for (int i = 31; i >= 0; --i) {
             int bit = (num >> i) & 1;
             int toggledBit = bit ^ 1;  // Try to find the opposite bit for maximizing XOR
-            if (node->containKey(toggledBit)) {
-                maxXor = (maxXor << 1) | 1;  // If found, this bit contributes to the max XOR
-                node = node->get(toggledBit);
-            } else {
-                maxXor = (maxXor << 1);  // Otherwise, keep the current bit
-                node = node->get(bit);
-            }
+if (node->containKey(toggledBit)) {
+    maxXor += (1 << i);  // Add to the result as this bit contributes to maximizing XOR
+    node = node->get(toggledBit);
+} else {
+    node = node->get(bit);
+}
+
         }
         return maxXor;
     }
