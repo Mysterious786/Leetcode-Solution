@@ -1,46 +1,68 @@
-#include <vector>
-#include <queue>
-#include <utility>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-class Solution {
-    const static long long MOD = 1e9 + 7;
+class Solution
+{
 public:
-    int countPaths(int n, vector<vector<int>>& roads) {
-        vector<pair<long long, long long>> dis(n, {1e18, 0}); // {shortest distance, number of ways}
-        dis[0] = {0, 1}; // starting node with distance 0 and 1 way to reach
-        
-        vector<vector<pair<int, int>>> adj(n);
-        for (auto& road : roads) {
-            adj[road[0]].push_back({road[1], road[2]});
-            adj[road[1]].push_back({road[0], road[2]}); // because the roads are bidirectional
+    int countPaths(int n, vector<vector<int>> &roads)
+    {
+        // Creating an adjacency list for the given graph.
+        vector<pair<int, int>> adj[n];
+        for (auto it : roads)
+        {
+            adj[it[0]].push_back({it[1], it[2]});
+            adj[it[1]].push_back({it[0], it[2]});
         }
-        
-        priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
+
+        // Defining a priority queue (min heap).
+        priority_queue<pair<long long, int>,
+                       vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
+
+        // Initializing the dist array and the ways array
+        // along with their first indices.
+        vector<long long> dist(n, LLONG_MAX); // Using long long for distances
+        vector<long long> ways(n, 0); // Using long long for ways
+        dist[0] = 0;
+        ways[0] = 1;
         pq.push({0, 0});
-  
-        while (!pq.empty()) {
-            auto it = pq.top();
-            long long edge = it.first;
-            int node = it.second;
+
+        // Define modulo value
+        long long mod = (long long)(1e9 + 7);
+
+        // Iterate through the graph with the help of priority queue
+        // just as we do in Dijkstra's Algorithm.
+        while (!pq.empty())
+        {
+            long long dis = pq.top().first;
+            int node = pq.top().second;
             pq.pop();
-            
-           // if (edge > dis[node].first) continue; // Skip if we have already found a shorter way
-            
-            for (auto& adjNode : adj[node]) {
-                int to = adjNode.first;
-                int W = adjNode.second;
-                if (dis[to].first > edge + W) {
-                    dis[to].first = edge + W;
-                    dis[to].second = dis[node].second;
-                    pq.push({dis[to].first, to});
-                } else if (dis[to].first == edge + W) {
-                    dis[to].second = (dis[to].second + dis[node].second) % MOD;
+
+            for (auto it : adj[node])
+            {
+                int adjNode = it.first;
+                long long edW = it.second;
+
+                // This ‘if’ condition signifies that this is the first
+                // time we’re coming with this short distance, so we push
+                // in PQ and keep the no. of ways the same.
+                if (dis + edW < dist[adjNode])
+                {
+                    dist[adjNode] = dis + edW;
+                    pq.push({dis + edW, adjNode});
+                    ways[adjNode] = ways[node];
+                }
+
+                // If we again encounter a node with the same short distance
+                // as before, we simply increment the no. of ways.
+                else if (dis + edW == dist[adjNode])
+                {
+                    ways[adjNode] = (ways[adjNode] + ways[node]) % mod;
                 }
             }
         }
-        
-        return dis[n - 1].second;
+        // Finally, we return the no. of ways to reach
+        // (n-1)th node modulo 10^9+7.
+        return (int)(ways[n - 1] % mod); // cast to int for return
     }
 };
+
