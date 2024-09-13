@@ -1,23 +1,27 @@
 class Solution {
-    int helper(int ind,vector<int>& nums,map<int,int>& mp,int n,vector<int>& dp){
-        if(ind >= n) return 0;
-        if(dp[ind] != -1) return dp[ind];
-        int notTake = 0+helper(ind+1,nums,mp,n,dp);
-        int take =0;
-        take+=mp[nums[ind]]*nums[ind];
-        if(ind+1<n && nums[ind]+1 == nums[ind+1]) take+=helper(ind+2,nums,mp,n,dp);
-        else if(ind+1 < n && nums[ind]+1 != nums[ind+1]) take+=helper(ind+1,nums,mp,n,dp);
-        return dp[ind] = max(take,notTake);
+
+    private:
+    int f(int ind,vector<pair<int,int>>& nums,vector<int>& dp)
+    {
+        if(ind < 0) return 0;
+        if(dp[ind]!=-1) return dp[ind];
+        if(ind == 0) return nums[ind].first*nums[ind].second;
+
+        int notTake = 0 + f(ind-1,nums,dp);
+        int take = 0;
+        if(ind-1>=0 and nums[ind].first-nums[ind-1].first==1)
+         take = nums[ind].first*nums[ind].second + f(ind-2,nums,dp);
+         else take = nums[ind].first*nums[ind].second + f(ind-1,nums,dp);
+        return dp[ind] = max(notTake,take);
     }
 public:
     int deleteAndEarn(vector<int>& nums) {
+        vector<pair<int,int>> v;
         map<int,int> mp;
         for(auto it : nums) mp[it]++;
-        vector<int> v;
-        for(auto it : mp) v.push_back(it.first);
-        sort(v.begin(),v.end());
-        vector<int> dp(v.size()+1,-1);
-        return helper(0,v,mp,v.size(),dp);
-        
+        for(auto it : mp) v.push_back({it.first,it.second});
+    int n = v.size();
+    vector<int> dp(n+1,-1);
+        return f(n-1,v,dp);
     }
 };
