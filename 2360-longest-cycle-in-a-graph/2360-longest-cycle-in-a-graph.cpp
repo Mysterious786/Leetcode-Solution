@@ -1,6 +1,7 @@
 class Solution {
     private:
     bool dfs(int node , vector<vector<int>> & adj,vector<int>& vis){
+        if(vis[node]==1) return false;
         vis[node]=2;
        for(auto it : adj[node]){
            if(!vis[it]){
