@@ -1,33 +1,35 @@
 class Solution {
 public:
     vector<int> validSequence(string word1, string word2) {
-        int n = word1.size();
-        int j = word2.size()-1;
-        vector<int> lastOccur(j+1,-1);
-        for(int i=n-1;(i>=0 && j>=0);i--)
+        int size1 = word1.size();
+        int size2 = word2.size();
+        vector<int> last(size2,-1);
+        vector<int> ans;
+        bool flag = true;
+        int j = size2-1;
+        for(int i=size1-1;(i>=0 and j>=0);i--)
         {
-            if(j>=0 and word2[j] == word1[i])
+            if(j>=0 and word1[i] == word2[j])
             {
-                lastOccur[j] = i;
+                last[j] = i;
                 j--;
             }
         }
-        vector<int> ans;
+        
         j = 0;
-        bool flag = true;
-        for(int i=0;i<n;i++)
+        for(int i=0;i<size1;i++)
         {
-            if(j<word2.size())
+            if(j<size2)
             {
-                if(word2[j] == word1[i] || (flag==true && (j==word2.size()-1 || (i+1<n and j+1<word2.size() and (i+1 <= lastOccur[j+1])) )))
+                if(word1[i] == word2[j] || (flag and (j==size2-1 || (i+1<size1 and j+1<size2 and (i+1<=last[j+1])))))
                 {
-                    if(word2[j]!=word1[i]) flag = false;
+                    if(word1[i]!=word2[j]) flag = false;
                     ans.push_back(i);
                     j++;
                 }
             }
         }
-        if(j==word2.size()) return ans;
+        if(j==size2) return ans;
         return {};
     }
 };
