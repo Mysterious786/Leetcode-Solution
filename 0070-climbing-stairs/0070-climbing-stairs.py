@@ -1,17 +1,19 @@
 class Solution:
-    
-    def stair_case(self, n, dp):
+    def tot_ways_to_climb(self, n:int, dp: List[int]) -> int:
         if n == 0:
             return 1
         if n < 0:
             return 0
-        if dp[n]!=-1:
+        if dp[n] != -1:
             return dp[n]
-        one_step = self.stair_case(n-1, dp)
-        two_step = self.stair_case(n-2, dp)
-        dp[n] = one_step + two_step
-        return dp[n]
-        
+        take_one_step = self.tot_ways_to_climb(n-1, dp)
+        take_two_steps = self.tot_ways_to_climb(n-2, dp)
+        ans =  take_one_step + take_two_steps
+        dp[n] = ans
+        return ans
     def climbStairs(self, n: int) -> int:
         dp = [-1]*(n+1)
-        return self.stair_case(n,dp)
+        return self.tot_ways_to_climb(n, dp)
+        
+        
+        
