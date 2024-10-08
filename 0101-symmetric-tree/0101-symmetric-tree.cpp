@@ -11,19 +11,17 @@
  */
 class Solution {
     private:
-    bool sym(TreeNode* r1,TreeNode* r2){
-        if(r1==NULL and r2==NULL) return true;
-        if(r1==NULL) return false;
-        if(r2==NULL) return false;
-        if(r1->val!=r2->val) return false;
-        
-        return (sym(r1->left,r2->right) and sym(r1->right,r2->left)) ;
+    bool sym(TreeNode* p,TreeNode* q)
+    {
+        if(p==NULL and q==NULL) return true;
+        if(p==NULL or q==NULL) return false;
+        if(p->val!=q->val) return false;
+        return sym(p->left,q->right) and sym(p->right,q->left);
     }
+    
 public:
     bool isSymmetric(TreeNode* root) {
-        if(root==NULL || (root->left==NULL and root->right==NULL)) return true;
-        
+        if(root == NULL || root->left==NULL and root->right==NULL) return root;
         return sym(root->left,root->right);
-        
     }
 };
