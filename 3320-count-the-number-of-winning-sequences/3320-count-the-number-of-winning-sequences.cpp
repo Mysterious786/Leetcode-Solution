@@ -8,9 +8,7 @@ public:
             return bob > 0 ? 1 : 0; // Valid winning sequence if Bob's score is greater than 0
         }
 
-        if (bob < -1000 || bob > 1000) // Check bounds for bob
-            return 0;
-
+       
         if (dp[prev + 1][curr][bob + 1000] != -1) 
             return dp[prev + 1][curr][bob + 1000];
 
