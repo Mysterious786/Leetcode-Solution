@@ -12,23 +12,26 @@
 class Solution {
 public:
     vector<int> rightSideView(TreeNode* root) {
-        if(root == NULL) return {};
-        map<int,int> mp;
-        queue<pair<TreeNode*,int>> q;
-        q.push({root,0});
         vector<int> ans;
-        
-        while(!q.empty())
-        {
+        if (!root) return ans;  // Handle case where root is NULL
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, 0});
+        map<int, int> mp;
+
+        while (!q.empty()) {
             auto front = q.front();
             q.pop();
-            auto node = front.first;
-            int level = front.second;
-            mp[level] = node->val;
-            if(node->left) q.push({node->left,level+1});
-            if(node->right) q.push({node->right,level+1});
+            TreeNode* node = front.first;
+            int lev = front.second;
+
+            mp[lev] = node->val;  // Update the value at each level with the rightmost node
+            
+            // Push the left and right children with incremented level
+            if (node->left) q.push({node->left, lev + 1});
+            if (node->right) q.push({node->right, lev + 1});
         }
-        for(auto it : mp) ans.push_back(it.second);
+
+        for (auto it : mp) ans.push_back(it.second);
         return ans;
     }
 };
