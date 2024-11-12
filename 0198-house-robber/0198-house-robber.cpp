@@ -1,24 +1,21 @@
 class Solution {
-    private:
-    int f(int ind,vector<int>& nums,  vector<int>& dp){
-        if(ind<0) return 0;
-        if(ind ==0) return nums[0];
+private:
+    int dp[105];
+    int robIt(int ind, vector<int>& nums, int n)
+    {
+        if(ind >= n) return 0;
         if(dp[ind]!=-1) return dp[ind];
+        // 2 cases broke current house and move to cur+2 house or not broke it
+        int notTake = 0 + robIt(ind+1,nums,n);
+        int take = nums[ind] + robIt(ind+2,nums,n);
 
+        return dp[ind] = max(take,notTake);
 
-        int notTake = 0+f(ind-1,nums,dp);
-        int take = nums[ind]+f(ind-2,nums,dp);
-        return dp[ind]=max(take,notTake);
     }
 public:
     int rob(vector<int>& nums) {
         int n = nums.size();
-        vector<int> dp(101,-1);
-        if(n==2){
-            return max(nums[0],nums[1]);
-        }
-        
-        return f(n-1,nums,dp);
-        
+        memset(dp,-1,sizeof(dp));
+        return robIt(0,nums,n);
     }
 };
