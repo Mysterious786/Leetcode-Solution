@@ -1,20 +1,27 @@
 class Solution {
-public:
-    int longestPalindromeSubseq(string s1) {
-        string s2 = s1;
-        reverse(s2.begin(),s2.end());
-        int n = size(s2);
-        vector<vector<int>> dp(n+1,vector<int>(n+1,0));
-        for(int i=n-1;i>=0;i--){
-            for(int j=n-1;j>=0;j--){
-                if(s1[i]==s2[j]){
-                    dp[i][j] = 1 + dp[i+1][j+1];
-                }
-                else{
-                    dp[i][j] = max(dp[i+1][j],dp[i][j+1]);
-                }
-            }
+    int dp[1004][1004];
+        int lengthOfLCS(int ind1, int ind2, int n, int m, string& text1, string& text2)
+    {
+        if(ind1 == n || ind2 == m) return 0;
+        if(dp[ind1][ind2]!=-1) return dp[ind1][ind2];
+        if(text1[ind1] == text2[ind2])
+        {
+            return dp[ind1][ind2] = 1 + lengthOfLCS(ind1+1,ind2+1,n,m,text1,text2);
         }
-        return dp[0][0];
+        else
+        {
+            return dp[ind1][ind2] = max(lengthOfLCS(ind1+1,ind2,n,m,text1,text2),lengthOfLCS(ind1, ind2+1,n,m,text1,text2));
+        }
+        return 0;
+
+    }
+public:
+    int longestPalindromeSubseq(string s) {
+        string text2 = s;
+        memset(dp,-1,sizeof(dp));
+        reverse(text2.begin(),text2.end());
+        int n = s.size();
+        return lengthOfLCS(0,0,n,n,s,text2);
+
     }
 };
