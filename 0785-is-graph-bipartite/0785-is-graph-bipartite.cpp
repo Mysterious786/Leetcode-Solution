@@ -1,24 +1,31 @@
 class Solution {
+    vector<vector<int>> adj;
+    vector<int> vis;
     vector<int> color;
-    private:
-    bool dfs(int node,int col,vector<vector<int>>& g){
+
+    bool dfs(int node, int col) {
+        vis[node] = 1;
         color[node] = col;
-        for(auto it : g[node]){
-            if(color[it]==-1){
-                if(dfs(it,!col,g)==false) return false;
+        for (auto it : adj[node]) {
+            if (!vis[it]) {
+                if (!dfs(it, col ^ 1)) return false; // Check bipartition recursively
+            } else if (color[it] == color[node]) {
+                return false; // Non-bipartite if adjacent nodes have the same color
             }
-            else if(color[it]==col) return false;
         }
         return true;
     }
+
 public:
     bool isBipartite(vector<vector<int>>& graph) {
-        
         int n = graph.size();
-        color.resize(n,-1);
-        for(int i=0;i<n;i++){
-            if(color[i]==-1){
-                if(dfs(i,0,graph)==false) return false;
+        adj = graph; // Directly assign adjacency list
+        vis.assign(n, 0); // Initialize visited array
+        color.assign(n, -1); // Initialize color array
+
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) {
+                if (!dfs(i, 0)) return false; // Start DFS with color 0
             }
         }
         return true;
